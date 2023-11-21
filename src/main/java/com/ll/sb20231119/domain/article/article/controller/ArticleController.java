@@ -2,7 +2,6 @@ package com.ll.sb20231119.domain.article.article.controller;
 
 import com.ll.sb20231119.domain.article.article.entity.Article;
 import com.ll.sb20231119.domain.article.article.service.ArticleService;
-import com.ll.sb20231119.global.rsData.RsData;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -34,16 +33,13 @@ public class ArticleController {
     }
 
     @PostMapping ("/article/write")
-    @ResponseBody
-    RsData<Article> write(@Valid WriteForm writeform){
-
+    String write(@Valid WriteForm writeform){
         Article write = articleService.write(writeform.title, writeform.body);
 
-        RsData<Article> rs = new RsData<>(
-                "S-1", "%s번 글이 추가되었습니다.".formatted(write.getId()),
-                write);
+        String msg = "add no.%s article".formatted(write.getId());
 
-        return rs;
+        //리다이렉트. 브라우저의 주소를 다음으로 바꾸도록 함.
+        return "redirect:/article/list?msg=" + msg;
     }
 
     @GetMapping ("/article/list")

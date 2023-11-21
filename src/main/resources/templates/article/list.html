@@ -1,9 +1,13 @@
-<h1>리스트</h1>
+<h1>글 목록</h1>
 
-<ul>
+<ul style="display: flex; gap: 20px;">
     <li><a href="/article/write">글 쓰기</a></li>
     <li><a href="/article/list">글 목록</a></li>
 </ul>
+
+<div style="color: red;" th:if="${param.msg} != null">
+    메세지 : [[${param.msg}]]
+</div>
 
 <ul th:if="${articles.size } > 0">
     <li th:each="article : ${articles.reversed}">
