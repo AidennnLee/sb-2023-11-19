@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -49,6 +50,14 @@ public class ArticleController {
         model.addAttribute("articles", articles);
 
         return "article/list";
+    }
+
+    @GetMapping ("/article/detail/{id}")
+    String showDetail (Model model, @PathVariable long id){
+        Article article = articleService.findById(id).get();
+        model.addAttribute("article", article);
+
+        return "article/detail";
     }
 
     @GetMapping("/article/getLastArticle")
