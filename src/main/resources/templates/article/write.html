@@ -1,3 +1,40 @@
-<a href="/article/doWrite?title=제목&body=내용">
-    글쓰기
-</a>
+<form method="POST" onsubmit="submitWriteForm(this); return false;" style="display: flex; flex-direction: column; gap: 20px; max-width: 500px">
+    <input type="text" name="title" placeholder="제목">
+
+    <input type="text" name="body" placeholder="내용">
+
+    <!--javascript:;는 아무것도 하지 않는다는 의미-->
+    <button type="submit">
+        글쓰기
+    </button>
+</form>
+
+<script>
+    function submitWriteForm(form){
+        //trim()을 통해 양 끝의 공백 제거. 아예 공백인 경우도 입력하지 않은 것으로 간주.
+        const inputTitle = form.title;
+        const inputBody = form.body;
+
+        inputTitle.value = inputTitle.value.trim();
+        inputBody.value = inputBody.value.trim();
+
+        const title = inputTitle.value;
+        const body = inputBody.value;
+
+        //입력하지 않은 경우나 공백만을 입력한 경우
+        if(title.length == 0){
+            alert("제목을 입력해주세요.");
+            inputTitle.focus();
+
+            return;
+        }
+        if(body.length == 0){
+            alert("내용을 입력해주세요.");
+            inputBody.focus();
+
+            return;
+        }
+
+        form.submit();
+    }
+</script>
