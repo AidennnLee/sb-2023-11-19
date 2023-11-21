@@ -3,10 +3,11 @@ package com.ll.sb20231119.domain.article.article.controller;
 import com.ll.sb20231119.domain.article.article.entity.Article;
 import com.ll.sb20231119.domain.article.article.service.ArticleService;
 import com.ll.sb20231119.global.rsData.RsData;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,7 +16,6 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@Validated
 public class ArticleController {
     private final ArticleService articleService;
 
@@ -24,14 +24,19 @@ public class ArticleController {
         return "article/write";
     }
 
+    @Data
+    public static class writeForm{
+        @NotBlank
+        private String title;
+        @NotBlank
+        private String body;
+    }
+
     @PostMapping ("/article/write")
     @ResponseBody
-    @Validated
-    RsData<Article> write(
-            @NotBlank(message = "제목을 입력하세요.") String title,
-            @NotBlank(message = "내용을 입력하세요.") String body){
+    RsData<Article> write(@Valid writeForm writeform){
 
-        Article write = articleService.write(title, body);
+        Article write = articleService.write(writeform.title, writeform.body);
 
         RsData<Article> rsData = new RsData<>("S-1", "%s번 글이 추가되었습니다.".formatted(write.getId()), write);
 
