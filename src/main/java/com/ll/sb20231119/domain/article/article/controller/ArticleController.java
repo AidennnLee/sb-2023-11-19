@@ -24,6 +24,14 @@ public class ArticleController {
     @PostMapping ("/article/write")
     @ResponseBody
     RsData<Article> write(String title, String body){
+        if(title == null || title.trim().length() == 0){
+            throw new IllegalArgumentException("제목을 입력해주세요.");
+        }
+
+        if(title == null || body.trim().length() == 0){
+            throw new IllegalArgumentException("내용을 입력해주세요.");
+        }
+
         Article write = articleService.write(title, body);
 
         RsData<Article> rsData = new RsData<>("S-1", "%s번 글이 추가되었습니다.".formatted(write.getId()), write);
