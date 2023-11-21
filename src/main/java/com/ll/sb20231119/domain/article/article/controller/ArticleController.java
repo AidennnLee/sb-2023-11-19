@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,7 +26,7 @@ public class ArticleController {
     }
 
     @Data
-    public static class writeForm{
+    public static class WriteForm{
         @NotBlank
         private String title;
         @NotBlank
@@ -34,13 +35,24 @@ public class ArticleController {
 
     @PostMapping ("/article/write")
     @ResponseBody
-    RsData<Article> write(@Valid writeForm writeform){
+    RsData<Article> write(@Valid WriteForm writeform){
 
         Article write = articleService.write(writeform.title, writeform.body);
 
-        RsData<Article> rsData = new RsData<>("S-1", "%s번 글이 추가되었습니다.".formatted(write.getId()), write);
+        RsData<Article> rs = new RsData<>(
+                "S-1", "%s번 글이 추가되었습니다.".formatted(write.getId()),
+                write);
 
-        return rsData;
+        return rs;
+    }
+
+    @GetMapping ("/article/list")
+    String showList (Model model){
+        List<Article> articles = articleService.findAll();
+
+        model.addAttribute("articles", articles);
+
+        return "article/list";
     }
 
     @GetMapping("/article/getLastArticle")
