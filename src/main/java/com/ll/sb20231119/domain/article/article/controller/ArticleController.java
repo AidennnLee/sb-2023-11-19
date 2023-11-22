@@ -8,10 +8,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,11 +30,20 @@ public class ArticleController {
         private String body;
     }
 
-    @PostMapping ("/article/write")
-    String write(@Valid WriteForm writeform){
-        Article write = articleService.write(writeform.title, writeform.body);
+    @Data
+    public static class ModifyForm{
+        @NotBlank
+        private String title;
+        @NotBlank
+        private String body;
+    }
 
-        String msg = "add no.%s article".formatted(write.getId());
+
+    @PostMapping ("/article/write")
+    String write(@Valid WriteForm writeForm){
+        Article write = articleService.write(writeForm.title, writeForm.body);
+
+        String msg = "no.%s article added".formatted(write.getId());
 
         //리다이렉트. 브라우저의 주소를 다음으로 바꾸도록 함.
         return "redirect:/article/list?msg=" + msg;
@@ -58,6 +64,31 @@ public class ArticleController {
         model.addAttribute("article", article);
 
         return "article/detail";
+    }
+
+    @GetMapping ("/article/modify/{id}")
+    String showModify (Model model, @PathVariable long id){
+        Article article = articleService.findById(id).get();
+        model.addAttribute("article", article);
+
+        return "article/modify";
+    }
+
+    @PostMapping("/article/modify/{id}")
+    String modify(@PathVariable long id, @Valid ModifyForm modifyForm){
+        articleService.modify(id, modifyForm.title, modifyForm.body);
+
+        String msg = "no.%s article modified".formatted(id);
+
+        return "redirect:/article/list?msg=" + msg;
+    }
+
+    @GetMapping ("/article/delete/{id}")
+    String delete (@PathVariable long id){
+        articleService.delete(id);
+        String msg = "no.%s article deleted".formatted(id);
+
+        return "redirect:/article/list?msg=" + msg;
     }
 
     @GetMapping("/article/getLastArticle")
