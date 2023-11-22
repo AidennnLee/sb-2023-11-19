@@ -10,7 +10,7 @@
 
     <input type="text" name="body" placeholder="내용" th:value="${article.body}">
 
-    <button type="submit">
+    <button type="submit" onclick="return confirm('정말로 수정하시겠습니까?');">
         글 수정
     </button>
 </form>
