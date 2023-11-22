@@ -47,13 +47,7 @@ public class ArticleController {
     @PostMapping ("/article/write")
     String write(@Valid WriteForm writeForm){
         Article write = articleService.write(writeForm.title, writeForm.body);
-/*
-        String msg = "%s번 게시물이 추가되었습니다.".formatted(write.getId());
-        msg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
 
-        //리다이렉트. 브라우저의 주소를 다음으로 바꾸도록 함.
-        return "redirect:/article/list?msg=" + msg;
-*/
         return rq.redirect("/article/list", "%s번 게시물이 추가되었습니다.".formatted(write.getId()));
     }
 

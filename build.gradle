@@ -24,8 +24,9 @@ repositories {
 dependencies {
     //밸리데이션
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    //뷰(타임리프)
+    // 타임리프(뷰)
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
     //스프링 웹
     implementation 'org.springframework.boot:spring-boot-starter-web'
     //액츄에이터
