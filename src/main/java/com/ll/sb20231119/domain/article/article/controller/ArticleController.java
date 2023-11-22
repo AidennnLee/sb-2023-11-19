@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Controller
@@ -43,7 +45,8 @@ public class ArticleController {
     String write(@Valid WriteForm writeForm){
         Article write = articleService.write(writeForm.title, writeForm.body);
 
-        String msg = "no.%s article added".formatted(write.getId());
+        String msg = "%s번 게시물이 추가되었습니다.".formatted(write.getId());
+        msg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
 
         //리다이렉트. 브라우저의 주소를 다음으로 바꾸도록 함.
         return "redirect:/article/list?msg=" + msg;
@@ -78,7 +81,8 @@ public class ArticleController {
     String modify(@PathVariable long id, @Valid ModifyForm modifyForm){
         articleService.modify(id, modifyForm.title, modifyForm.body);
 
-        String msg = "no.%s article modified".formatted(id);
+        String msg = "%s번 게시물이 수정되었습니다.".formatted(id);
+        msg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
 
         return "redirect:/article/list?msg=" + msg;
     }
@@ -86,7 +90,8 @@ public class ArticleController {
     @GetMapping ("/article/delete/{id}")
     String delete (@PathVariable long id){
         articleService.delete(id);
-        String msg = "no.%s article deleted".formatted(id);
+        String msg = "%s번 게시물이 삭제되었습니다".formatted(id);
+        msg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
 
         return "redirect:/article/list?msg=" + msg;
     }
